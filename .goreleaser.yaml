@@ -11,5 +11,8 @@ builds:
 release:
   prerelease: auto
 
+archives:
+  - format: binary
+
 checksum:
   name_template: "checksum.txt"
