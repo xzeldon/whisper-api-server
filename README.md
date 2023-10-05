@@ -38,10 +38,9 @@ Receive a response in JSON format:
 
 # Usage with [Obsidian](https://obsidian.md/)
 
-To integrate this with the [Obsidian voice recognotion plugin](https://github.com/nikdanilov/whisper-obsidian-plugin), follow these steps:
-
-1. Open the plugin's settings.
-2. Set the following values:
+1. Install [Obsidian voice recognotion plugin](https://github.com/nikdanilov/whisper-obsidian-plugin)
+2. Open the plugin's settings.
+3. Set the following values:
    - API KEY: `sk-1`
    - API URL: `http://localhost:3000/v1/audio/transcriptions`
    - Model: `whisper-1`
