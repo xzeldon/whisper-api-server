@@ -22,9 +22,14 @@ func saveFormFile(name string, c echo.Context) (string, error) {
 	}
 	defer src.Close()
 
+	tmpDir, err := ensureDir("tmp")
+	if err != nil {
+		return "", err
+	}
+
 	ext := filepath.Ext(file.Filename)
 	filename := time.Now().Format(time.RFC3339)
-	filename = "./tmp/" + sanitizeFilename(filename) + ext
+	filename = tmpDir + "/" + sanitizeFilename(filename) + ext
 
 	dst, err := os.Create(filename)
 	if err != nil {
@@ -45,4 +50,15 @@ func sanitizeFilename(filename string) string {
 		filename = strings.ReplaceAll(filename, char, "-")
 	}
 	return filename
+}
+
+func ensureDir(dirPath string) (string, error) {
+	if _, err := os.Stat(dirPath); os.IsNotExist(err) {
+		err := os.MkdirAll(dirPath, 0700)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return dirPath, nil
 }
