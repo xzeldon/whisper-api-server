@@ -31,8 +31,8 @@ Receive a response in JSON format:
 
 # Roadmap
 
-- [ ] Implement automatic model downloading from [huggingface](https://huggingface.co/ggerganov/whisper.cpp/tree/main)
-- [ ] Implement automatic `Whisper.dll` downloading from [Guthub releases](https://github.com/Const-me/Whisper/releases)
+- [x] Implement automatic model downloading from [huggingface](https://huggingface.co/ggerganov/whisper.cpp/tree/main)
+- [x] Implement automatic `Whisper.dll` downloading from [Guthub releases](https://github.com/Const-me/Whisper/releases)
 - [ ] Provide prebuilt binaries for Windows
 - [ ] Include instructions for running on Linux with Wine (likely possible).
 
