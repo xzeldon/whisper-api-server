@@ -19,6 +19,10 @@ jobs:
       - uses: actions/setup-go@v4
         with:
           go-version: stable
+      - name: Set up MinGW
+        uses: egor-tensin/setup-mingw@v2
+        with:
+          platform: x64
       - uses: goreleaser/goreleaser-action@v5
         with:
           distribution: goreleaser
