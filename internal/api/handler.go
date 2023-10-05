@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"net/http"
@@ -11,7 +11,7 @@ type TranscribeResponse struct {
 	Text string `json:"text"`
 }
 
-func transcribe(c echo.Context, whisperState *WhisperState) error {
+func Transcribe(c echo.Context, whisperState *WhisperState) error {
 	audioPath, err := saveFormFile("file", c)
 	if err != nil {
 		c.Logger().Errorf("Error reading file: %s", err)
