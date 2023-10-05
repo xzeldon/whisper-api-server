@@ -1,0 +1,14 @@
+builds:
+  - binary: whisper-api-server
+    goos:
+      - windows
+    goarch:
+      - amd64
+    env:
+      - CGO_ENABLED=1
+
+release:
+  prerelease: auto
+
+checksum:
+  name_template: "checksum.txt"

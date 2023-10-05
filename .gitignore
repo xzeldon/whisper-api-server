@@ -5,3 +5,4 @@ whisper-api-server.exe
 
 tmp/*
 !tmp/.gitkeep
+dist/
