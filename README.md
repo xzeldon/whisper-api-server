@@ -36,14 +36,25 @@ Receive a response in JSON format:
 }
 ```
 
+# Usage with [Obsidian](https://obsidian.md/)
+
+To integrate this with the [Obsidian voice recognotion plugin](https://github.com/nikdanilov/whisper-obsidian-plugin), follow these steps:
+
+1. Open the plugin's settings.
+2. Set the following values:
+   - API KEY: `sk-1`
+   - API URL: `http://localhost:3000/v1/audio/transcriptions`
+   - Model: `whisper-1`
+
 # Roadmap
 
 - [x] Implement automatic model downloading from [huggingface](https://huggingface.co/ggerganov/whisper.cpp/tree/main)
 - [x] Implement automatic `Whisper.dll` downloading from [Guthub releases](https://github.com/Const-me/Whisper/releases)
 - [x] Provide prebuilt binaries for Windows
 - [ ] Include instructions for running on Linux with Wine (likely possible).
-- [ ] Provide custom model path using flags
-- [ ] Use flags to override the model type
+- [ ] Use flags to override the model path
+- [ ] Use flags to override the model type (when downloading the model)
+- [ ] Use flags to override the port
 
 # Credits
 
