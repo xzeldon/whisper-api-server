@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/xzeldon/whisper-api-server/internal/api"
 	"github.com/xzeldon/whisper-api-server/internal/resources"
@@ -10,6 +11,8 @@ import (
 func main() {
 	e := echo.New()
 	e.HideBanner = true
+
+	e.Use(middleware.CORS())
 
 	if l, ok := e.Logger.(*log.Logger); ok {
 		l.SetHeader("${time_rfc3339} ${level}")
