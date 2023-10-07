@@ -41,9 +41,6 @@ func InitializeWhisperState(modelPath string) (*WhisperState, error) {
 		return nil, err
 	}
 
-	params.AddFlags(whisper.FlagNoContext)
-	params.AddFlags(whisper.FlagTokenTimestamps)
-
 	fmt.Printf("Params CPU Threads : %d\n", params.CpuThreads())
 
 	return &WhisperState{
