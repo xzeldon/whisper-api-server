@@ -1,5 +1,6 @@
 Whisper.dll
-ggml-medium.bin
+ggml-*
+*.exe
 
 whisper-api-server.exe
 
