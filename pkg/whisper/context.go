@@ -207,6 +207,7 @@ func (context *IContext) FullDefaultParams(strategy eSamplingStrategy) (*FullPar
 		return nil, errors.New("FullDefaultParams did not return params")
 	}
 	ParamObj := NewFullParams(params)
+	// ParamObj.SetLanguage(Polish)
 
 	if ParamObj.TestDefaultsOK() {
 		return ParamObj, nil

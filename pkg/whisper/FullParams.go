@@ -146,9 +146,9 @@ func (this *FullParams) TestDefaultsOK() bool {
 		return false
 	}
 
-	if this.cStruct.Language != English {
-		return false
-	}
+	// if this.cStruct.Language != English {
+	// 	return false
+	// }
 
 	// Todo ... why do these not line up as expected.. is our struct out of alignment ?
 	/*
@@ -214,6 +214,7 @@ func NewFullParams(cstruct *_FullParams) *FullParams {
 }
 
 func _newFullParams_cStruct() *_FullParams {
+
 	return &_FullParams{
 
 		strategy:       0,
