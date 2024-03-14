@@ -86,14 +86,14 @@ func (this *FullParams) RemoveFlags(newflag eFullParamsFlags) {
 	this.cStruct.Flags = this.cStruct.Flags ^ newflag
 }
 
-func (this *FullParams) SetLanguage(language eLanguage) {
+func (this *FullParams) SetLanguage(language int32) {
 	if this == nil {
 		return
 	} else if this.cStruct == nil {
 		return
 	}
 
-	this.cStruct.Language = language
+	this.cStruct.Language = eLanguage(language)
 }
 
 /*using pfnNewSegment = HRESULT( __cdecl* )( iContext* ctx, uint32_t n_new, void* user_data ) noexcept;*/
