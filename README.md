@@ -11,6 +11,20 @@ This API server enables audio transcription using the OpenAI Whisper models.
 
 # Build from source
 
+Before build make sure that **CGO_ENABLED** env is set to **1**
+
+```
+$env:CGO_ENABLED = "1"
+```
+
+you can check this with this command
+
+```
+go env
+```
+
+Also you have to have installed gcc x64 i.e. by MYSYS
+
 Download the sources and use `go build`.
 For example, you can build using the following command:
 
