@@ -14,10 +14,10 @@ This API server enables audio transcription using the OpenAI Whisper models.
 Before build make sure that **CGO_ENABLED** env is set to **1**
 
 ```
-set CGO_ENABLED 1
+$env:CGO_ENABLED = "1"
 ```
 
-or preferable set it parament. Then check it via
+you can check this with this command
 
 ```
 go env
