@@ -15,7 +15,7 @@ type WhisperState struct {
 	mutex   sync.Mutex
 }
 
-func InitializeWhisperState(modelPath string) (*WhisperState, error) {
+func InitializeWhisperState(modelPath string, lang int32) (*WhisperState, error) {
 	lib, err := whisper.New(whisper.LlDebug, whisper.LfUseStandardError, nil)
 	if err != nil {
 		return nil, err
@@ -40,6 +40,8 @@ func InitializeWhisperState(modelPath string) (*WhisperState, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	params.SetLanguage(lang)
 
 	fmt.Printf("Params CPU Threads : %d\n", params.CpuThreads())
 
