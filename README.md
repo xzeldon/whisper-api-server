@@ -42,7 +42,7 @@ go build -ldflags "-s -w" -o server.exe main.go
 Make a request to the server using the following command:
 
 ```sh
-curl http://localhost:3000/v1/audio/transcriptions \
+curl http://localhost:3031/v1/audio/transcriptions \
   -H "Content-Type: multipart/form-data" \
   -F file="@/path/to/file/audio.mp3" \
 ```
@@ -61,7 +61,7 @@ Receive a response in JSON format:
 2. Open the plugin's settings.
 3. Set the following values:
    - API KEY: `sk-1`
-   - API URL: `http://localhost:3000/v1/audio/transcriptions`
+   - API URL: `http://localhost:3031/v1/audio/transcriptions`
    - Model: `whisper-1`
 
 # Roadmap
