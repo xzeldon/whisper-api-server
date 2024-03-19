@@ -12,19 +12,7 @@ import (
 	"github.com/xzeldon/whisper-api-server/internal/resources"
 )
 
-func main() {
-
-	e := echo.New()
-	e.HideBanner = true
-
-	args, errParsing := resources.ParseFlags()
-	if errParsing != nil {
-		e.Logger.Error("Error parsing flags: ", errParsing)
-		return
-	}
-
-	e.Use(middleware.CORS())
-
+func change_working_directory(e *echo.Echo) {
 	exePath, errs := os.Executable()
 	if errs != nil {
 		e.Logger.Error(errs)
@@ -42,6 +30,21 @@ func main() {
 
 	cwd, _ := os.Getwd()
 	fmt.Println("Current working directory:", cwd)
+}
+
+func main() {
+
+	e := echo.New()
+	e.HideBanner = true
+	change_working_directory(e)
+
+	args, errParsing := resources.ParseFlags()
+	if errParsing != nil {
+		e.Logger.Error("Error parsing flags: ", errParsing)
+		return
+	}
+
+	e.Use(middleware.CORS())
 
 	if l, ok := e.Logger.(*log.Logger); ok {
 		l.SetHeader("${time_rfc3339} ${level}")
@@ -58,5 +61,5 @@ func main() {
 		return api.Transcribe(c, whisperState)
 	})
 
-	e.Logger.Fatal(e.Start("127.0.0.1:3000"))
+	e.Logger.Fatal(e.Start(fmt.Sprintf("127.0.0.1:%d", args.Port)))
 }
