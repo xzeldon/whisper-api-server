@@ -93,7 +93,7 @@ func (this *FullParams) SetLanguage(language int32) {
 		return
 	}
 
-	this.cStruct.Language = eLanguage(language)
+	this.cStruct.Language = language
 }
 
 /*using pfnNewSegment = HRESULT( __cdecl* )( iContext* ctx, uint32_t n_new, void* user_data ) noexcept;*/
@@ -178,7 +178,7 @@ type _FullParams struct {
 	offset_ms      int32
 	duration_ms    int32
 	Flags          eFullParamsFlags
-	Language       eLanguage
+	Language       int32
 
 	thold_pt    float32
 	thold_ptsum float32

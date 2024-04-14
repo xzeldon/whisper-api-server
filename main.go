@@ -1,21 +1,24 @@
 package main
 
 import (
+	"bufio"
+	"encoding/base64"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/labstack/echo/v4"
-	"github.com/labstack/echo/v4/middleware"
-	"github.com/labstack/gommon/log"
 	"github.com/xzeldon/whisper-api-server/internal/api"
 	"github.com/xzeldon/whisper-api-server/internal/resources"
 )
 
-func change_working_directory(e *echo.Echo) {
+// begin delimiter const
+const beginDelimiter = "[begin]"
+const endDelimiter = "[end]"
+
+func change_working_directory() {
 	exePath, errs := os.Executable()
 	if errs != nil {
-		e.Logger.Error(errs)
+		println("Error getting executable path")
 		return
 	}
 
@@ -24,7 +27,7 @@ func change_working_directory(e *echo.Echo) {
 	// Change the working directory to the executable directory
 	errs = os.Chdir(exeDir)
 	if errs != nil {
-		e.Logger.Error(errs)
+		println("Error changing working directory")
 		return
 	}
 
@@ -34,32 +37,46 @@ func change_working_directory(e *echo.Echo) {
 
 func main() {
 
-	e := echo.New()
-	e.HideBanner = true
-	change_working_directory(e)
+	change_working_directory()
 
 	args, errParsing := resources.ParseFlags()
 	if errParsing != nil {
-		e.Logger.Error("Error parsing flags: ", errParsing)
+		println("Error parsing flags: ", errParsing)
 		return
-	}
-
-	e.Use(middleware.CORS())
-
-	if l, ok := e.Logger.(*log.Logger); ok {
-		l.SetHeader("${time_rfc3339} ${level}")
 	}
 
 	whisperState, err := api.InitializeWhisperState(args.ModelPath, args.Language)
 
 	if err != nil {
-		e.Logger.Error(err)
+		println("Error initializing whisper state: ", err)
+	}
+	const maxCapacity = 2048 * 10240
+
+	scanner := bufio.NewScanner(os.Stdin)
+	buf := make([]byte, maxCapacity)
+	scanner.Buffer(buf, maxCapacity)
+
+	println("waiting_for_input")
+	if scanner.Scan() {
+		base64Data := scanner.Text()
+		decodedBuffer, err := base64.StdEncoding.DecodeString(base64Data)
+		if err != nil {
+			fmt.Println("Error decoding buffer:", err)
+			return
+		}
+
+		result := api.TranscribeBytes(decodedBuffer, whisperState)
+		println(beginDelimiter + result + endDelimiter)
+		println("finished")
+
+		// Process the decodedBuffer (e.g., print its length)
+		fmt.Println("Received buffer size:", len(decodedBuffer))
+
+		// Send a response back to Node.js (optional)
+		fmt.Fprintln(os.Stdout, "Buffer received successfully!")
+	} else if err := scanner.Err(); err != nil {
+		fmt.Println("Error reading from stdin:", err)
 	}
 
-	e.POST("/v1/audio/transcriptions", func(c echo.Context) error {
-
-		return api.Transcribe(c, whisperState)
-	})
-
-	e.Logger.Fatal(e.Start(fmt.Sprintf("127.0.0.1:%d", args.Port)))
+	// e.Logger.Fatal(e.Start(fmt.Sprintf("127.0.0.1:%d", args.Port)))
 }

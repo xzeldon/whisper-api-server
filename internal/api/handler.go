@@ -50,6 +50,34 @@ func TranscribeFromFile(c echo.Context, whisperState *WhisperState) error {
 	return c.JSON(http.StatusOK, response)
 }
 
+func TranscribeBytes(buffer []byte, whisperState *WhisperState) string {
+	whisperState.mutex.Lock()
+	defer whisperState.mutex.Unlock()
+
+	bufferSpecial, err := whisperState.media.LoadAudioFileData(&buffer, true)
+
+	if err != nil {
+		println("Error loading audio file data: ", err)
+		// return err
+	}
+
+	err = whisperState.context.RunStreamed(whisperState.params, bufferSpecial)
+	if err != nil {
+		println("Error processing audio: ", err)
+		// return err
+	}
+
+	result, err := getResult(whisperState.context)
+	if err != nil {
+		println("Error getting result: ", err)
+		// return err
+	}
+
+	trimed := strings.TrimLeft(result, " ")
+	return trimed
+
+}
+
 func Transcribe(c echo.Context, whisperState *WhisperState) error {
 	// Get the file header
 	fileHeader, err := c.FormFile("file")

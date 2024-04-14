@@ -20,6 +20,7 @@ type ParsedArguments struct {
 	Language  int32
 	ModelPath string
 	Port      int
+	// Buffer    []byte
 }
 
 type LanguageMap map[string]string
@@ -64,6 +65,8 @@ func ParseFlags() (*ParsedArguments, error) {
 	flag.StringVar(&args.Language, "language", "", "Language to be processed") // Optional: Redundant to demonstrate
 	flag.StringVar(&args.ModelPath, "m", "", "Path to the model file (required)")
 	flag.StringVar(&args.ModelPath, "modelPath", "", "Path to the model file (required)") // Optional: Redundant
+	// bufferArg := flag.String("buffer", "", "Base64-encoded buffer data")
+
 	flag.IntVar(&args.Port, "p", 3031, "Port to start the server on")
 	flag.IntVar(&args.Port, "port", 3031, "Port to start the server on") // Optional: Redundant
 
@@ -75,6 +78,16 @@ func ParseFlags() (*ParsedArguments, error) {
 
 	// Parsing flags
 	flag.Parse()
+
+	// if *bufferArg != "" {
+	// 	decodedBuffer, err := base64.StdEncoding.DecodeString(*bufferArg)
+	// 	if err != nil {
+	// 		fmt.Println("Error decoding buffer:", err)
+	// 		return nil, err
+	// 	}
+	// 	// Process the decoded buffer (e.g., print its contents)
+	// 	fmt.Println("Decoded Buffer:", string(decodedBuffer))
+	// }
 
 	args.Language = strings.ToLower(args.Language)
 
@@ -92,5 +105,6 @@ func ParseFlags() (*ParsedArguments, error) {
 		Language:  languageCode,
 		ModelPath: args.ModelPath,
 		Port:      args.Port,
+		// Buffer:    []byte(*bufferArg),
 	}, nil
 }
