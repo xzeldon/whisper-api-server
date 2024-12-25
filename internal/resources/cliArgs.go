@@ -73,7 +73,7 @@ func ParseFlags() (*ParsedArguments, error) {
             // Process language code with fallback
             languageCode, err := processLanguageAndCode(args.Language)
             if err != nil {
-                fmt.Printf("Error setting language, defaulting to English")
+                fmt.Println("Error setting language, defaulting to English")
                 // Default to English
                 languageCode = 0x6E65
             }
