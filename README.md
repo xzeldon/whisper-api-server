@@ -9,7 +9,12 @@ This API server enables audio transcription using the OpenAI Whisper models.
 - Download `.exe` from [Releases](https://github.com/xzeldon/whisper-api-server/releases/latest)
 - Just run it!
 
-# Build from source
+# Build from source (Windows)
+
+## Prerequisites
+
+- GCC Compiler Installed in your PATH (You can get it from [here](https://github.com/niXman/mingw-builds-binaries))
+- Install Go (https://go.dev/doc/install)
 
 Before build make sure that **CGO_ENABLED** env is set to **1**
 
@@ -46,7 +51,7 @@ Receive a response in JSON format:
 
 ```json
 {
-  "text": "Imagine the wildest idea that you've ever had, and you're curious about how it might scale to something that's a 100, a 1,000 times bigger. This is a place where you can get to do that."
+	"text": "Imagine the wildest idea that you've ever had, and you're curious about how it might scale to something that's a 100, a 1,000 times bigger. This is a place where you can get to do that."
 }
 ```
 
