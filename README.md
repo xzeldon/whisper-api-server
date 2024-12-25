@@ -42,7 +42,7 @@ go build -ldflags "-s -w" -o server.exe main.go
 Make a request to the server using the following command:
 
 ```sh
-curl http://localhost:3031/v1/audio/transcriptions \
+curl http://localhost:3000/v1/audio/transcriptions \
   -H "Content-Type: multipart/form-data" \
   -F file="@/path/to/file/audio.mp3" \
 ```
@@ -61,7 +61,7 @@ Receive a response in JSON format:
 2. Open the plugin's settings.
 3. Set the following values:
    - API KEY: `sk-1`
-   - API URL: `http://localhost:3031/v1/audio/transcriptions`
+   - API URL: `http://localhost:3000/v1/audio/transcriptions`
    - Model: `whisper-1`
 
 # Roadmap
@@ -70,9 +70,8 @@ Receive a response in JSON format:
 - [x] Implement automatic `Whisper.dll` downloading from [Guthub releases](https://github.com/Const-me/Whisper/releases)
 - [x] Provide prebuilt binaries for Windows
 - [ ] Include instructions for running on Linux with Wine (likely possible).
-- [ ] Use flags to override the model path
-- [ ] Use flags to override the model type (when downloading the model)
-- [ ] Use flags to override the port
+- [x] Use flags to override the model path
+- [x] Use flags to override the port
 
 # Credits
 

@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD
 // license that can be found in the LICENSE file.
 // Adapted mainly from github.com/gonutz/w32
-
 //go:build windows
 // +build windows
 
@@ -10,7 +9,7 @@ package whisper
 
 import (
 	"errors"
-	"syscall"
+	"fmt"
 	"unsafe"
 
 	"golang.org/x/sys/windows"
@@ -51,34 +50,46 @@ func (fi VS_FIXEDFILEINFO) FileVersion() uint64 {
 	return uint64(fi.FileVersionMS)<<32 | uint64(fi.FileVersionLS)
 }
 
-func GetFileVersionInfoSize(path string) uint32 {
+func GetFileVersionInfoSize(path string) (uint32, error) {
+	pathPtr, err := windows.UTF16PtrFromString(path)
+	if err != nil {
+		return 0, err
+	}
 	ret, _, _ := getFileVersionInfoSize.Call(
-		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(path))),
+		uintptr(unsafe.Pointer(pathPtr)),
 		0,
 	)
-	return uint32(ret)
+	return uint32(ret), nil
 }
 
-func GetFileVersionInfo(path string, data []byte) bool {
+func GetFileVersionInfo(path string, data []byte) (bool, error) {
+	pathPtr, err := windows.UTF16PtrFromString(path)
+	if err != nil {
+		return false, err
+	}
 	ret, _, _ := getFileVersionInfo.Call(
-		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(path))),
+		uintptr(unsafe.Pointer(pathPtr)),
 		0,
 		uintptr(len(data)),
 		uintptr(unsafe.Pointer(&data[0])),
 	)
-	return ret != 0
+	return ret != 0, nil
 }
 
 // VerQueryValueRoot calls VerQueryValue
 // (https://msdn.microsoft.com/en-us/library/windows/desktop/ms647464(v=vs.85).aspx)
-// with `\` (root) to retieve the VS_FIXEDFILEINFO.
+// with \ (root) to retrieve the VS_FIXEDFILEINFO.
 func VerQueryValueRoot(block []byte) (VS_FIXEDFILEINFO, error) {
 	var offset uintptr
 	var length uint
 	blockStart := unsafe.Pointer(&block[0])
+	rootPathPtr, err := windows.UTF16PtrFromString(`\`)
+	if err != nil {
+		return VS_FIXEDFILEINFO{}, err
+	}
 	ret, _, _ := verQueryValue.Call(
 		uintptr(blockStart),
-		uintptr(unsafe.Pointer(syscall.StringToUTF16Ptr(`\`))),
+		uintptr(unsafe.Pointer(rootPathPtr)),
 		uintptr(unsafe.Pointer(&offset)),
 		uintptr(unsafe.Pointer(&length)),
 	)
@@ -97,27 +108,24 @@ func VerQueryValueRoot(block []byte) (VS_FIXEDFILEINFO, error) {
 
 func GetFileVersion(path string) (WinVersion, error) {
 	var result WinVersion
-	size := GetFileVersionInfoSize(path)
-	if size <= 0 {
+	size, err := GetFileVersionInfoSize(path)
+	fmt.Println(path)
+	if err != nil || size <= 0 {
 		return result, errors.New("GetFileVersionInfoSize failed")
 	}
-
 	info := make([]byte, size)
-	ok := GetFileVersionInfo(path, info)
-	if !ok {
+	ok, err := GetFileVersionInfo(path, info)
+	if err != nil || !ok {
 		return result, errors.New("GetFileVersionInfo failed")
 	}
-
 	fixed, err := VerQueryValueRoot(info)
 	if err != nil {
 		return result, err
 	}
 	version := fixed.FileVersion()
-
 	result.Major = uint32(version & 0xFFFF000000000000 >> 48)
 	result.Minor = uint32(version & 0x0000FFFF00000000 >> 32)
 	result.Patch = uint32(version & 0x00000000FFFF0000 >> 16)
 	result.Build = uint32(version & 0x000000000000FFFF)
-
 	return result, nil
 }
