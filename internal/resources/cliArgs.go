@@ -66,6 +66,8 @@ func ParseFlags() (*ParsedArguments, error) {
 
     var parsedArgs *ParsedArguments
 
+    cobra.MousetrapHelpText = ""
+
     rootCmd := &cobra.Command{
         Use:   "whisper",
         Short: "Audio transcription using the OpenAI Whisper models",
