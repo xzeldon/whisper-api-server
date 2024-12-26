@@ -63,7 +63,7 @@ func main() {
 	}
 
 	e.POST("/v1/audio/transcriptions", func(c echo.Context) error {
-		return api.Transcribe(c, whisperState)
+		return api.TranscribeFromFile(c, whisperState)
 	})
 
 	address := fmt.Sprintf("127.0.0.1:%d", args.Port)
